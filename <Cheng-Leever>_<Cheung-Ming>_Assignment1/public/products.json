@@ -1,0 +1,7 @@
+{    
+
+        "product" : "Obsidian",
+        "price" : 12.00,
+        "image": "./images/obsidian.png",
+        "quantity_available": 10 
+}
