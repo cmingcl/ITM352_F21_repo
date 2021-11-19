@@ -7,35 +7,35 @@ var products = [
                 "product" : "Obsidian",
                 "price" : 12.00,
                 "image": "./images/obsidian.png",
-                "quantity_available": 10 
+                "inventory": 10 
     },
     {
             //Products 2 
                 "product" : "Pyrite",
                 "price" : 15.00,
                 "image" : "./images/pyrite.png",
-                "quantity_available": 10 
+                "inventory": 10 
     },
     {
             //Products 3 
                 "product" : "Red Jasper",
                 "price" : 13.00,
                 "image" : "./images/red_jasper.png",
-                "quantity_available": 10 
+                "inventory": 10 
     }, 
     {
             //Products 4 
                 "product" : "Rose Quartz",
                 "price" : 14.00,
                 "image" : "./images/rose_quartz.png",
-                "quantity_available": 10 
+                "inventory": 10 
     },
     {
         //Products 5 
             "product" : "Smokey Quartz",
             "price" : 12.00,
             "image" : "./images/smokey_quartz.png",
-            "quantity_available": 10 
+            "inventory": 10 
 },
     
     ];
