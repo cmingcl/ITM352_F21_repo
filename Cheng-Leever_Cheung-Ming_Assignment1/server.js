@@ -1,86 +1,83 @@
+/* from Nick Ashikawa + lab 12 + Assignment 1 on Modules*/
+
+/* Load the Product Data */ 
+var products= require(__dirname + '/products.json');
+
+products.forEach( (prod,i) => {prod.quantity_available = 10});
 var express = require('express');
 var app = express();
-var myParser = require("body-parser");
 
-var data = require('./public/product_data.js');
-var products = data.products;
+/* Initialize QueryString package */
+const qs = require('query-string');
 
-products.forEach((prod, i) => { prod.inventory = 10; });
-var querystring = require("querystring");
+//get the body
+app.use(express.urlencoded({ extended: true }));
 
 // Routing 
+app.get("/products.js", function (request, response, next) {
+   response.type('.js');
+   var products_str = `var products = ${JSON.stringify(products)};`;
+   response.send(products_str);
+});
 
-// Monitor all requests
+// monitor all requests
 app.all('*', function (request, response, next) {
-    console.log(request.method + ' to ' + request.path);
-    next();
+   console.log(request.method + ' to ' + request.path);
+   next();
 });
 
-// GET request for products.js.
-app.get('/product_data.js', function (request, response, next) {
-    response.type('.js');
-    var products_str = `var products = ${JSON.stringify(products)};`;
-    response.send(products_str);
+// process purchase request (validate quantities, check quantity available) 
+
+app.post('/process_form', function (request, response, next){
+   var quantities = request.body['quantity'];
+   //assume no errors or quantity
+   var errors = {};
+   var check_quantities = false;
+   //check for NonNegInt
+   for (i in quantities) {
+      if (isNonNegInt(quantities[i]) == false){
+         errors['quantity_' + i] = `Please choose a valid quantity for ${products[i].item}.`;
+      }
+      if (quantities[i] > 0 ) {
+         check_quantities = true;
+      }
+      if (quantities[i] > products[i].quantity_available) {
+         errors['quantity_available' + i] = `We don't have ${(quantities[i])} ${products[i].item} available.`;
+      }
+   }
+   if (!check_quantities) {
+      errors['no_quantities'] = `Please select a quantity`;
+   }
+
+   let qty_obj = { "quantity": JSON.stringify(quantities)};
+    //to ask if the object is empty or not
+    if (Object.keys(errors).length == 0) {
+      // remove from inventory quantities
+      for(i in products){
+          products[i].quantity_available -= Number(quantities[i]);
+      }
+      response.redirect('./invoice.html?' + qs.stringify(qty_obj));
+      } 
+   else { //if there are errors, take the errors and go back to products_display.html
+      let errs_obj = { "errors": JSON.stringify(errors) };
+      console.log(qs.stringify(qty_obj));
+      response.redirect('./products_display.html?' + qs.stringify(qty_obj) + '&' + qs.stringify(errs_obj));
+  }
 });
 
-// Function adopted from previous labs.
-// Checks if a string q is a non-neg integer. If returnErrors is true, the array of errors is returned.
-// Otherwise returns true if q is non-neg int.
-function isNonNegInt(q, return_errors = false) {
-    errors = []; // Assume no errors at first.
-    if (q == '') q = 0; // Blank quantities = 0.
-    if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
-    if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
-    if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
-    return return_errors ? errors : (errors.length == 0);
-}
+// route all other GET requests to files in public 
+app.use(express.static(__dirname + '/public'));
 
-// Adopted from Lab 13 Exercise 3.
-app.use(myParser.urlencoded({ extended: true }));
-
-// Process purchase request (validate quantities, check quantity available)
-// Adopted from Lab 13 Exercise 3.
-app.post("/process_form", function (req, res, next) {
-    // Post request routing.
-    let POST = req.body;
-
-    // Error alert if form submission has no quantities.
-    var errors = {};
-    errors['no_quantities'] = 'Please enter a valid quantity!';
-
-    for (i = 0; i < products.length; i++) {
-        qua = POST['quantity' + i];
-        // Error alert if invalid quantities inputted into textboxes.
-        if (isNonNegInt(qua) == false) {
-            errors['quantity' + i] = `Please enter valid quantities for ${products[i].model}`;
-        }
-        if (qua > 0) {
-            delete errors['no_quantities']; // Delete errors if valid quantities.
-            // Validate quantities by checking available amount in inventories.
-            if (qua > products[i].inventory) { // Error alert if quantity submitted is more than available in inventories.
-                errors['inventory' + i] = `${qua} of ${products[i].model} not available. Only ${products[i].inventory} available.`;
-            }
-        }
-    }
-
-    // Querystring based on POST request.
-    QString = querystring.stringify(POST);
-    if (JSON.stringify(errors) === '{}') {
-        // Remove quantity for amount of products i purchased.
-        for (i = 0; i < products.length; i++) {
-            products[i].inventory -= Number(POST['quantity' + i]); 
-        }
-        // Redirect customer to invoice.html if valid quantities entered.
-        res.redirect("./invoice.html?" + QString);
-    } else { // Else, give the errors.
-        let errObj = { 'error': JSON.stringify(errors) };
-        QString += '&' + querystring.stringify(errObj);
-        res.redirect("./products_display.html?" + QString); // Redirect to store.html if errors.
-    }
-});
-
-// Route all other GET requests to files in public.
-app.use(express.static('./public'));
-
-// Start server.
+// start server
 app.listen(8080, () => console.log(`listening on port 8080`));
+
+//is nonnegint function
+function isNonNegInt(q, returnErrors = false) {
+   errors = []; // assume no errors
+   if (q == '') q = 0  //blank means 0
+   if (Number(q) != q) errors.push('<font color="red">Not a number</font>'); //check if value is a number
+   if (q < 0) errors.push('<font color="red">Negative value</font>'); // Check if it is non-negative
+   if (parseInt(q) != q) errors.push('<font color="red">Not an integer</font>'); // Check if it is an integer
+
+   return returnErrors ? errors : (errors.length == 0);
+}
