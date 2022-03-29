@@ -1,0 +1,32 @@
+[
+    {
+        "item": "Obsidian",
+        "price": 12.00,
+        "image": "./images/obsidian.png",
+        "quantity_available": 10
+    },
+    {
+        "item": "Pyrite",
+        "price": 15.00,
+        "image": "./images/pyrite.png",
+        "quantity_available": 10
+    },
+    {
+        "item": "Red Jasper",
+        "price": 13.00,
+        "image": "./images/red_jasper.png",
+        "quantity_available": 10
+    },
+    {
+        "item": "Rose Quartz",
+        "price": 14.00,
+        "image": "./images/rose_quartz.png",
+        "quantity_available": 10
+    },
+    {
+        "item": "Smokey Quartz",
+        "price": 12.00,
+        "image": "./images/smokey_quartz.png",
+        "quantity_available": 10
+    }
+]
