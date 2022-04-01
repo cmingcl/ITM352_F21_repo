@@ -41,7 +41,7 @@
                 } else if (total_qty == 0) { // no quantity selections, just give a general alert
                     alert("Please select some quantities!")
                 } else {
-                    window.location = `./login.html${document.location.search}`; //tells the page to redirect itself to invoice.html
+                    window.location = `./invoice.html${document.location.search}`; //tells the page to redirect itself to invoice.html
                 window.stop;
                 }
             }
@@ -66,7 +66,7 @@
 </style>
 
 <body>
-    <form name="product_form" action="login.html" method="GET">
+    <form name="product_form" action="invoice.html" method="GET">
         <header>
             <h1>Crystal Shop</h1>
             <link href="products_style.css" rel="stylesheet">

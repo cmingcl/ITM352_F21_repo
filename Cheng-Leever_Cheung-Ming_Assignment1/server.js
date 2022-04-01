@@ -6,9 +6,7 @@ var products= require(__dirname + '/products.json');
 products.forEach( (prod,i) => {prod.quantity_available = 10});
 var express = require('express');
 var app = express();
-
-/* Initialize QueryString package */
-const qs = require('query-string');
+ 
 
 //get the body
 app.use(express.urlencoded({ extended: true }));
@@ -50,18 +48,19 @@ app.post('/process_form', function (request, response, next){
    }
 
    let qty_obj = { "quantity": JSON.stringify(quantities)};
+   let qs = new URLSearchParams(qty_object);
     //to ask if the object is empty or not
     if (Object.keys(errors).length == 0) {
       // remove from inventory quantities
       for(i in products){
           products[i].quantity_available -= Number(quantities[i]);
       }
-      response.redirect('./invoice.html?' + qs.stringify(qty_obj));
+      response.redirect('./invoice.html?' + qs.toString());
       } 
    else { //if there are errors, take the errors and go back to products_display.html
-      let errs_obj = { "errors": JSON.stringify(errors) };
-      console.log(qs.stringify(qty_obj));
-      response.redirect('./products_display.html?' + qs.stringify(qty_obj) + '&' + qs.stringify(errs_obj));
+
+    qs.append("errors", JSON.stringify(errors));
+      response.redirect('./products_display.html?' + qs.toString());
   }
 });
 
