@@ -4,7 +4,7 @@ html {
   
     font-family: 'American TypeWriter', serif;
     background-color: tan;
-    background-image: url("./Images/Star_Wallpaper.jpg");
+    background-image: url("./images/star_wallpaper.jpg");
     font-size: 40px;
     text-align: center; /* Product Images, Price, and Quantity */ 
   
@@ -66,9 +66,10 @@ html {
   height: 200px;
   position: relative;
   border-radius: 5px;
-  margin-right: auto;
-  margin-left: auto;
+  margin-right: 15%;
+  margin-left: 15%;
   }
+
   /*Invoice*/
   table {
     font-family: 'Raleway', sans-serif;
