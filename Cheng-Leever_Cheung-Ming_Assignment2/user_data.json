@@ -1,0 +1,22 @@
+{
+    "dport": {
+        "email": "dport@hawaii.edu",
+        "name": "Dan Port",
+        "password": "portspassword"
+    },
+    "itm352": {
+        "email": "itm352@hawaii.edu",
+        "name": "ITM 352",
+        "password": "grader"
+    },
+    "cmcl": {
+        "name": "Cheung-Ming Cheng-Leever",
+        "password": "password",
+        "email": "cmcl@hawaii.edu"
+    },
+    "mingchengleever": {
+        "name": "Ming Cheng-Leever",
+        "password": "passcode",
+        "email": "mingchengleever@gmail.com"
+    }
+}
