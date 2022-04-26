@@ -3,12 +3,12 @@
 
 // DEFINING VARIABLES
 
-// from Lab 13, to use express modules
+// to use express modules
 var express = require('express');
 var app = express();
 var myParser = require("body-parser");
 
-// requires user_data.json file for user information, taken from Lab 14
+// requires user_data.json file for user information
 var fs = require('fs');
 var filename = './user_data.json';
 
@@ -51,15 +51,14 @@ function isNonNegInt(q, return_errors = false) {
     return return_errors ? errors : (errors.length == 0);
 }
 
-// Adopted from Lab 13 Exercise 3.
 app.use(express.urlencoded({ extended: true }));
-// Checks for the existence of the file, from Lab 14
+// Checks for the existence of the file
 if (fs.existsSync(filename)) { 
     var data = fs.readFileSync(filename, 'utf-8'); // if it exists, read the file user_data.json storedin filename
     var user_data = JSON.parse(data); // parse user data
   } 
 
-// POST request from signin.html. Adopted from Assignment 2 code examples on ITM 352 website, and received help from Professor Port
+// POST request from signin.html. Adopted from Assignment 2 code examples on ITM 352 website
 app.post("/process_login", function (req, res) {
     var the_username = req.body.username.toLowerCase();
     if (typeof user_data[the_username] != 'undefined') {
